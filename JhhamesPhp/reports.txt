@@ -1,0 +1,140 @@
+So basically, this is the report for a doctor-patient type of site.
+
+	BACK-END report summary 
+	PROGRAMMING LANGUAGE: PHP 
+Functionality 1. Signup
+	For doctors/patients to signup on the site,they fill in their info in a form displayed on the sign up page of our site, 
+	where the form has its ACTION set to a file(this file will contain php codes to process the form inputs),
+	and the form method is the POST method.
+	
+		//code
+		<form method="POST" action="processingpage.php">
+		//This code shows how we set our form action and method.
+	
+	The PHP codes on the 'processingpage.pphp' does the form processing. Each form input is stored in a universal PHP
+	custom associative array based on the form method, since we're using the POST method, its stored in the array 
+	$_POST	and the index of the array is set by the name if the form input
+	
+	//source code illustration
+	$_POST['email'];
+	//This code refers to the variable of an associative array($_POST[])
+	//which holds the value of an input field with a its name attribute set as 'email'  
+	
+	After receiving all input field from the universal POST varaiable into a custom variable of our own
+	then we try storing them, in our database called 'medicals'(database for this project) in a table created for who wants to sign up 
+	sql queries illustrated below, nut before querying the database, we check if the form datas exists 
+	(i.e check if form was submitted and if the fields are not blank) using an if else statement
+	
+	//php codes 
+	if(isset($_POST['name_of_submit_button'])) //checks if submit button was clicked
+	{	
+	   if(!empty($_POST['important field']) && !empty($_POST['another important field'])) //check if important fields are not empty
+	    {	
+		//then we proceed to collect the $_POST array values to our custom variables	
+		$name = $_POST['name'];
+		$email = $_POST['email']; 
+		//and all other form data
+		
+		$connect = mysqli_connect('hostname','database_user','password', 'database')or  die('unable to connect to database');
+		//the above line stores database connection into a variable 	
+	    	
+		$sql_query = "INSERT INTO `tablename`(colum1,column2,column3...) values('$name', '$email', $other)";
+		//this stores the sql query into an array
+		
+		$excute = mysqli_query($sql_query, $connect);
+		//the function abovetakes two parameters to execute its query
+			if($execute)
+			{
+				echo "signup successful, login below";
+				//when the query adds the data to database, we print the statement above
+			}
+			else
+				echo mysqli_error($connect);
+				//this function displays error message
+					
+	   		}
+	}
+	else
+	{
+		echo "Form not submitted yet";
+	
+	
+	
+	if storing into database is successful, the page prints out a message to the doctor saying
+	'sign up successful, Login below', and if not, an sql error message is displayed
+
+Functionality 2. Sign in
+	For a user of the site(either doctor or patient) to access his page, her needs to sign in to the site by filling out a sign in form displayed on the site. We then write some php scripts to compare the form fields filled bythe user to their already stored data in our database, if the comparism is right then, they are given access to their page.
+
+	//php codes
+	if(isset($_POST['name of the login button'])) //code checks if the login submit  button has been clicked
+	{
+		$entered_username = $_POST['username']; //this stores the value inside the universal associative array into our custom array
+		$password = $_POST['password']; //this stores the value inside the universal associative array into our custom array
+
+		$connect = mysqli_connect('hostname', 'username', 'password', 'database');
+		//connection to databse is set and stored in a variable
+		$sql = "SELECT * FROM `tablename` where username='$username' && password='$password'";
+		//sql query to select data from the table where the data in the column(username and password) matches our custome variable
+
+		$execute = mysqli_query($sql, #connect);
+		//executes the query.
+
+		$returned_rows = mysqli_num_rows($exeute); //this counts the numbor rows returned from the database from our sql query 
+
+		if($returned_rows> 0)
+		{
+			header('location:newpage.php');
+			//redirects to the page we want them to access after sign in
+		}
+		else
+		{
+			echo 'incorrect Username or Password'; //Denies the user acces if no row is returned from the query
+		}
+	}
+	 	
+	
+Functionality 3. search box.
+	Search box is used to find anything on the site either an article, doctor's name, an illness (a doctor's speciality).
+	After the user fills the search box displayed on the page and hits search, the database is queried based on user's input value and the rows matching the input value based on query parameters are displayed using a while loop after storing them into an array.(i.e if more than one row is found based on the search query, the values are stored in array which can be displayed with a loo(p)
+		//code illustration 
+	
+		if(isset($_POST['search_button']) && !empty($_POST['search'])) //checks if the search button was clicked and search field isn't empty
+		{
+			$search_parameter = $_POST['search']; //stores the inout field into a variable
+
+			$sql_search_query = "SELECT * from `tablename` where doctor's name  LIKE '%$search_parameter%' or illness LIKE '%$search_parameter' "; //this queries the database to return balues corresponding to the column and search parameter
+
+			$execute = mysqli_query($connect, $sql_search_query) or die(mysqli_error($connect)); //runs sql query or return error messahe
+
+			if($execute)
+			{
+				while($row = mysqli_fetch_array($execute)) //iterating over the mysqli_fetch_array(),
+				{
+					echo $row['name']; //to echo the value of the column 'name' in our table
+				}
+			}
+		}
+		else
+		{
+			echo "form field cant be blank";
+		}
+
+Functionality 4. Add article
+	Other doctor's action in the dashboard is his ability to add article posts to the front page of the site ,
+	the article content and header is sent to the database using the same functions we used to sign up, and
+	they're displayed the same way we display the search result by looping through the mysqli_fetch_array();
+	with just a little difference in the sql queries for selecting data.
+	//sql query to display the article from the database
+	$sql = "SELECT * FROM `article_tablename`"; 
+	//this sql query is without a where condition.
+
+Functionality 5. Chat with doctors
+	With our site, after patient has search for a doctor or an illness, he can proceed to chat with the doctor and therefore book appointment from the chat. The chat functinality is made possible with the database, we simply send their messages to a table in tyhe database called `messages` and to display the messages for their chta session so as not to confuse it with other messages in the messages table, we include a column call 'from' and another column called 'sent_to'. To display the messages we simply query the database with a "WHERE" condition. 
+
+	//sql query to select messages 
+	$doctor = $_SESSION['patient_id'];
+	$patient= $_SESSIOM['doctors id'];
+	$sql = "SELECT * FROM `messages` WHERE sent_to = '$doctor' && from = '$patient' ";
+
+	And its displayed in the UI same way as the search result- looping over the mysqli_fetch_array();
