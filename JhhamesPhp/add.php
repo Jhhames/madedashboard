@@ -39,7 +39,7 @@ if(post('add') !== null)
 		$connect = mysqli_connect('hostname', 'db_username','db_password', 'db_name') or die('error connecting to database'); //the code wont work untill you enter the right parameters for the database connection
 
 		//because of the die function, the code will run uo to this level only if database connection is succesful
-		$sql = "INSERT into `the_name_of_the_table_storing_your_comments_in_db`(name_column,email_column,comment_column) VALUES($name','$email','$comment');"
+		$sql = "INSERT into `the_name_of_the_table_storing_your_comments_in_db`(name_column,email_column,comment_column) VALUES($name','$email','$comment');";
 		//if you have a table already in the database the above queury would insert the three variables into respective columns specified in the column bracket
 
 		$query = mysqli_query($connect, $sql) or die(mysqli_error($connect)); // to execute the query, pass two paramters to this function, database connection and query 

@@ -28,8 +28,6 @@ Admin Dashboard
 				<h4> User Dashboard</h4> <p>
 					<ul  class="nav nav-pills nav-stacked" id="side_Menu">
 						<li class="active">   <a href="index.php"><span class="glyphicon glyphicon-th"> </span> Dashboard </a> </li>
-						<li><a href="gallery.php"><span class="glyphicon glyphicon-picture"> </span> Gallery </a> </li>
-						<li><a href="upload.php.php"><span class="glyphicon glyphicon-upload"> </span> Upload </a> </li>
 						<li><a href="Subscription.php"><span class="glyphicon glyphicon-user"> </span> subscribers </a> </li>
 						<li><a href=""><span class="glyphicon glyphicon-log-out"> </span> Logout </a> </li>
 					</ul>

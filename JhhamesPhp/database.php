@@ -20,7 +20,7 @@ function insert($array,$connect,$tablename)
 	// $escaped_values = array_map('mysqli_real_escape_string', array_values($array));
 	$values  = implode("', '", $array);
 
-	$sql = "INSERT INTO `$tablename` VALUES ('$values'); ";
+	$sql = "INSERT INTO `$tablename`($columns) VALUES ('$values'); ";
 	$query = mysqli_query($connect, $sql) or die(mysqli_error($connect));
 
 	return $query;
