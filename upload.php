@@ -3,9 +3,17 @@
 	include('JhhamesPhp/sessions.php');
 	 $connect = connect_db('dashboard');
 
+	if(!isset($_SESSION['owner_name']) && !isset($_SESSION['email']) )
+	{
+		$_SESSION['errorMessage'] = "Login is required to access the page";
+		redirect_to('register.php');	
+	}
+
 	include('JhhamesPhp/upload.php');
     
-    $fetch= fetch_order_limit('dashtable',$connect, 'DESC', 6);
+    $email = $_SESSION['email'];
+	$sql = "SELECT * FROM `dashtable` where owner = '$email' ORDER BY id DESC LIMIT 6 ";
+    $fetch= fetch_custom($connect, $sql);
 ?>
 <!DOCTYPE html>
 <html>
@@ -13,9 +21,9 @@
 	<title>
 		Dashboard index 
 	</title>
-	<!-- <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 	<script type="text/javascript" src="js/jquery.min.js"></script>
-	<script type="text/javascript" src="js/bootstrap.min.js"></script> -->
+	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 	 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
@@ -32,9 +40,9 @@
 					<ul  class="nav nav-pills nav-stacked" id="side_Menu">
 						<li>   <a href="index.php"><span class="glyphicon glyphicon-th"> </span> Dashboard </a> </li>
 						<li><a href="gallery.php"><span class="glyphicon glyphicon-picture"> </span> Gallery </a> </li>
-						<li class="active"><a href="upload.php.php"><span class="glyphicon glyphicon-upload"> </span> Upload </a> </li>
-						<li><a href="Subscription.php"><span class="glyphicon glyphicon-user"> </span> Subscription </a> </li>
-						<li><a href=""> <span class="glyphicon glyphicon-log-out"> </span> Logout </a> </li>
+						<li class="active"><a href="upload.php"><span class="glyphicon glyphicon-upload"> </span> Upload </a> </li>
+						<li><a href="subscription.php"><span class="glyphicon glyphicon-user"> </span> Subscription </a> </li>
+						<li><a href="logou.php"> <span class="glyphicon glyphicon-log-out"> </span> Logout </a> </li>
 					</ul>
 			</div>
 			<div class="col-md-10">
@@ -75,7 +83,8 @@
 				</div>		
 
 				<div class="row" style="padding: 10px;">
-			
+						
+						<div  class="table-responsive">
 						<form action="#" method="POST" enctype="multipart/form-data">
 					<table class="table table-striped" style="width: 100%">
 							<tr>
@@ -107,6 +116,7 @@
 							</tr>
 						</table>
 						</form>
+					</div>
 				
 				</div>
 			</div>

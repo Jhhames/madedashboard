@@ -2,6 +2,20 @@
 	include('../JhhamesPhp/database.php');
 	include('../JhhamesPhp/sessions.php');
 	 $connect = connect_db('dashboard');
+
+	 if(!isset($_SESSION['admin_name']) && !isset($_SESSION['admin_email']) )
+	 {
+	 	$_SESSION['errorMessage'] = "Login is required to access the page";
+	 	redirect_to('login.php');	
+	 }
+
+	 if(isset($_SESSION['admin_name'])  && isset($_SESSION['admin_email']) )
+	 {
+	 	$email = $_SESSION['admin_email'];
+	 	$sql = "SELECT * from `admin` where email ='$email'";
+
+	 	$select_admin = fetch_custom($connect, $sql);
+	 }
 ?>
 
 <!DOCTYPE html>
@@ -28,19 +42,33 @@ Admin Dashboard
 				<h4> User Dashboard</h4> <p>
 					<ul  class="nav nav-pills nav-stacked" id="side_Menu">
 						<li class="active">   <a href="index.php"><span class="glyphicon glyphicon-th"> </span> Dashboard </a> </li>
-						<li><a href="Subscription.php"><span class="glyphicon glyphicon-user"> </span> subscribers </a> </li>
-						<li><a href=""><span class="glyphicon glyphicon-log-out"> </span> Logout </a> </li>
+						<li><a href="subscribers.php"><span class="glyphicon glyphicon-user"> </span> Subscribers </a> </li>
+						<li><a href="admin.php"><span class="glyphicon glyphicon-user"> </span> Admins </a> </li>
+						<li><a href="Logout.php"><span class="glyphicon glyphicon-log-out"> </span> Logout </a> </li>
 					</ul>
 			</div>
 			<div class="col-md-10" style="padding-top: 1px;">
 				<div class="row">
-						<h1 id="headtext">PAGE CONTENT</h1>
+						<h1 id="headtext">Admin <?= $_SESSION['admin_name'] ?></h1>
 
 				</div>
+				<?= error(); ?> <?= success(); ?>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						Welcome back 
+					</div>
+					<div class="panel-body">
+				This is the your admin panel you can check the <a href="subscribers.php"><b>subscribers</b> </a> page to activate subscription and deactivate them.<br>
+				You can also add other admins, check the <a href="admin.php"><b>Admins</b> </a> page to get started.
+				</div>
+				
+
 			</div>
 			</div>
 
+		</div>
 	</div>
+
 	<footer class="page-footer stylish-color-dark font-small" id="footer" style="background: #010101; color: white; height: 100px;">
 		<div class="container-fluid">
 		<div class="footer-copyright text-center">

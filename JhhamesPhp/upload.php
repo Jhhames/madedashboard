@@ -25,7 +25,9 @@ if ((post('upload')!== null) && (post('desc')!== null))
 							'id' => ' ' ,
 							'url' => $file_url,
 							'name' => $file_name,
+							'owner' => $_SESSION['email'],
 							'description' => $description,
+							'owner' => $_SESSION['email'],
 							'status' => 'not-slide'
 
 						);

@@ -5,6 +5,12 @@
 	include('JhhamesPhp/remove.php'); 
 	include('JhhamesPhp/add.php'); 
 
+	 if(!isset($_SESSION['owner_name']) && !isset($_SESSION['email']) )
+	 {
+	 	$_SESSION['errorMessage'] = "Login is required to access the page";
+	 	redirect_to('register.php');	
+	 }
+
 	if(post('delete') !== null)
 	{
 		$id = post('delete');
@@ -23,8 +29,13 @@
 
 	}
 
-	$fetch = fetch_order('dashtable', $connect, 'DESC'); 
-	$fetch_5 = fetch_order_limit_where('dashtable', $connect, 'DESC', 'status', 'slide');
+	$email = $_SESSION['email'];
+
+	$sql = "SELECT * FROM `dashtable` where owner = '$email' ORDER BY id DESC ";
+	$fetch = fetch_custom($connect, $sql); 
+
+	$sql_5 = "SELECT * FROM `dashtable` WHERE (owner = '$email' AND status = 'slide') ORDER BY id DESC";
+	$fetch_5 = fetch_custom($connect, $sql_5);
 
 ?>
 <!DOCTYPE html>
@@ -54,7 +65,7 @@
 							<li class="active"><a href="gallery.php"><span class="glyphicon glyphicon-picture"> </span> Gallery </a> </li>
 							<li><a href="upload.php"><span class="glyphicon glyphicon-upload"> </span> Upload </a> </li>
 							<li><a href="subscription.php"><span class="glyphicon glyphicon-user"> </span> Subscription </a> </li>
-							<li><a href=""><span class="glyphicon glyphicon-log-out"> </span> Logout </a> </li>
+							<li><a href="logout.php"><span class="glyphicon glyphicon-log-out"> </span> Logout </a> </li>
 						</ul>
 				</div>
 				<div class="col-md-10" style="padding-top:;">
@@ -67,7 +78,7 @@
 
 						echo success();		
 						echo error();		
-									if ($fetch)
+									if (isset($fetch) && !empty($fetch))
 									{
 										while ($row = mysqli_fetch_array($fetch))
 										{
@@ -94,6 +105,10 @@
 								<?php		
 										}
 									}
+									else
+									{
+										echo "NO PICTURES IN GALLERY";
+									}
 								?>	
 
 						
@@ -106,7 +121,7 @@
 
 					<div class="row" style="padding:10px">
 						<?php
-	$fetch_5 = fetch_order_limit_where('dashtable', $connect, 'DESC', 'status', 'slide');
+	// $fetch_5 = fetch_order_limit_where('dashtable', $connect, 'DESC', 'status', 'slide');
 
 									if ($fetch_5)
 									{

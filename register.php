@@ -2,9 +2,9 @@
 	include('JhhamesPhp/database.php');
 	include('JhhamesPhp/sessions.php');
 	 $connect = connect_db('dashboard');
-	include('JhhamesPhp/validation.php');
 	
-	if (post('signup') != null) {
+	if (post('signup') != null)
+	{
 		$designer = post('dname');
 		$owner = post('oname');
 		$email = post('email');
@@ -21,17 +21,19 @@
 				if(($type != 'image/png') && ($type != 'image/jpg') && ($type != 'image/jpeg') )
 				{
 					$_SESSION['errorMessage'] ="You need to select a PNG or JPG or JPEG picture.";
-					$_SESSION['errorMessage'] .= " You selceted a file ".$type;
+					$_SESSION['errorMessage'] .= " You selected a file ".$type;
 					$_SESSION['errorMessage'] .= " you can upload later in the update profile page";
 					$url = "";
+
+					die($_SESSION['errorMessage']);
 				}
 				else
 				{
 					$errorforupload = $_SESSION['errorMessage'] = "unable to upload logo, Check that the size is right, you can upload later in the update profile page";
-					$upload = move_uploaded_file($tmp_loc, 'uploads/'.$name) or die($errorforupload);
+					$upload = move_uploaded_file($tmp_loc, 'logo/'.$name) or die($errorforupload);
 						if($upload)
 						{
-							$file_url = 'http://localhost/dashboard1/uploads/'.$name;
+							$file_url = 'http://localhost/dashboard1/logo/'.$name;
 							$description = post('desc');
 							$file_name = $name;
 
@@ -45,6 +47,7 @@
 						}
 				}
 			}
+			
 			 	$array = array(
 			 		'designer_name' => $designer,
 			 		'owner_name'=> $owner,
@@ -58,22 +61,56 @@
 
 			 	if ($to_db)
 			 	{	
-			 		$_SESSION['username'];
+			 		$_SESSION['username'] = $email;
 			 		$_SESSION['successMessage'] = "Registration successful , please check the subscription page for more info";
 			 		redirect_to('index.php');
 			 	}
 			 	else
 			 	{
-			 		echo "Awon aye to get code yii";
+	
 			 	}
 	 } 
+
+	if(post('login') != null)
+	{
+		$email = mysqli_real_escape_string($connect,post('email'));
+		$password = mysqli_real_escape_string($connect,post('password'));
+
+		$sql = "SELECT * FROM `subscribers` where email ='$email' && password = '$password' ";
+
+		$log_check = fetch_custom($connect, $sql);
+
+		if(mysqli_num_rows($log_check) > 0)
+		{
+			while($row = mysqli_fetch_array($log_check))
+			{
+				$_SESSION['id'] = $row['id'];
+				$_SESSION['designer_name'] = $row['designer_name'];
+				$_SESSION['owner_name'] = $row['owner_name'];
+				$_SESSION['email'] = $row['email'];
+				$_SESSION['subscription'] = $row['subscription'];
+				$_SESSION['logo'] = $row['logo'];
+				$_SESSION['logedin_suscriber'] = TRUE;
+
+				redirect_to('index.php');
+			}
+		}
+		else
+		{
+			$_SESSION['errorMessage'] = "Invalid Username Or Password";
+		}
+
+	}
+
+
+
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
 	<title>
-		Registration panel
+		Registration And Login Panel
 	</title>
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 	<script type="text/javascript" src="js/jquery.min.js"></script>
@@ -199,7 +236,7 @@
 		<div class="tab-content" style="background-color: white ;" >
 			<div class="tab-pane fade" id="signup" >
 				<div class="row" style="padding:10px">
-					<form method="POST" style="padding: 10px ;" id="signup_form">
+					<form method="POST" style="padding: 10px ;" id="signup_form" autocomplete="off">
 						<div class="form-group">
 							<label for="dname"> Desiger name<br> <span style="color: red;" id="name-feedback"></span> </label>
 							<input class="form-control" type="text" name="dname" id="dname" placeholder="Enter Deisgner company name" >
@@ -237,15 +274,21 @@
 
 			<div class="tab-pane fade in active " id="login">
 				<div class="row" style="padding: 10px ; ">
+					<div class="row" style="padding-left: 5%; padding-right: 5%;"> 
+						<div style="margin: auto">
+							<?= error(); ?> 
+						</div>
+					</div>
 					<form method="POST" style="padding: 10px ;">
+						<?= success(); ?> <?=error() ?>
 						<div class="form-group">
 							<label for="email"> Email </label><br>
-							<input class="form-control" type="email" name="email" id="email">
+							<input placeholder="Enter your email Address" required class="form-control" type="email" name="email" id="email">
 						</div>
 
 						<div class="form-group">
 							<label for="password"> Password </label><br>
-							<input class="form-control" type="password" name="password" id="password">
+							<input placeholder="Enter Password" required class="form-control" type="password" name="password" id="password">
 						</div>
 						<input type="submit" class="btn btn-primary btn-block" name="login" value="Sign in" />
 					</form>

@@ -3,8 +3,8 @@
 	// include('JhhamesPhp/sessions.php');
 	//        $connect = connect_db('dashboard');
 
-	$fetch_5 = fetch_order_limit_where('dashtable', $connect, 'DESC', 'status', 'slide');
-
+$sql_5 = "SELECT * FROM `dashtable` WHERE (owner = '$email' AND status = 'slide') ORDER BY id DESC";
+$fetch_5 = fetch_custom($connect, $sql_5);
 
 $slide_to = 0;
 	while ($row = mysqli_fetch_array($fetch_5)) {

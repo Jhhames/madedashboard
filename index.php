@@ -1,36 +1,22 @@
-<!-- <?php
+<?php
 	include('JhhamesPhp/database.php');
 	include('JhhamesPhp/sessions.php');
 	 $connect = connect_db('dashboard');
 
-	if((post('submit') !== null ))
-	{
-		$name = post('name');
-		$class1 = post('class1');
-		$class2 = post('class2');
-		$class3 = post('class3');
-		$class4 = post('class4');
+	 if(!isset($_SESSION['owner_name']) && !isset($_SESSION['email']) )
+	 {
+	 	$_SESSION['errorMessage'] = "Login is required to access the page";
+	 	redirect_to('register.php');	
+	 }
 
-		$array = array(
-		'id' => ' ',
-		'name' => $name,
-		'class1' => $class1,
-		'class2' => $class2,
-		'class3' => $class3,
-		'class4' => $class4
-		);
+	 $email = $_SESSION['email'];
+	 $sql = "SELECT * from `dashtable` where owner = '$email' ";
 
-		if(insert($array, $connect, 'dashtable'))
-		{
-			$_SESSION['successMessage'] = "Data added to database";
-		}
-		else
-		{
-			$_SESSION['errorMessage'] = "Error!!";
-		}
-	}
+	 $select_pictures = fetch_custom($connect, $sql);
 
-?> -->
+	 $num_pictures = mysqli_num_rows($select_pictures);
+
+?>
 
 <!DOCTYPE html>
 <html>
@@ -38,14 +24,19 @@
 	<title>
 		Dashboard index 
 	</title>
-	<!-- <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 	<script type="text/javascript" src="js/jquery.min.js"></script>
-	<script type="text/javascript" src="js/bootstrap.min.js"></script> -->
+	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-	 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+    crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+    crossorigin="anonymous"></script>
+    
 	<link rel="stylesheet" type="text/css" href="css/mystyles.css">
 
 </head>
@@ -57,9 +48,9 @@
 					<ul  class="nav nav-pills nav-stacked" id="side_Menu">
 						<li class="active">   <a href="index.php"><span class="glyphicon glyphicon-th"> </span> Dashboard </a> </li>
 						<li><a href="gallery.php"><span class="glyphicon glyphicon-picture"> </span> Gallery </a> </li>
-						<li><a href="Upload.php"><span class="glyphicon glyphicon-upload"> </span> Upload </a> </li>
+						<li><a href="upload.php"><span class="glyphicon glyphicon-upload"> </span> Upload </a> </li>
 						<li><a href="subscription.php"><span class="glyphicon glyphicon-user"> </span> Subscription </a> </li>
-						<li><a href=""><span class="glyphicon glyphicon-log-out"> </span> Logout </a> </li>
+						<li><a href="logout.php"><span class="glyphicon glyphicon-log-out"> </span> Logout </a> </li>
 					</ul>
 			</div>
 			<div class="col-md-10">
@@ -68,7 +59,7 @@
 				echo error();
 				?>
 				<div class="row text-center" >
-					<h1 id="headtext">K - COUTURE  </h1>
+					<h1 id="headtext"><?= $_SESSION['designer_name'] ?>  </h1>
 					
 				</div>
 				<div class="row" style="padding: 5px">
@@ -89,7 +80,7 @@
 									<strong>Company owner</strong>
 								</td>
 								<td>
-									Enioluwa
+									<?= $_SESSION['owner_name'] ?>
 								</td>
 							</tr>
 							<tr>
@@ -98,7 +89,7 @@
 								</td>
 
 								<td>
-									18 Pictures
+									<?=	$num_pictures ?>
 								</td>
 							</tr>	
 							<tr>
@@ -107,27 +98,10 @@
 								</td>
 
 								<td>
-									<span class="bg-success">Active </span>
+									<span class="bg-success"><?= $_SESSION['subscription'] ?> </span>
 								</td>
 							</tr>	
-							<tr>
-								<td>
-									<strong> subscription </strong>	
-								</td>
-
-								<td>
-									Active
-								</td>
-							</tr>	
-							<tr>
-								<td>
-									<strong> subscription</strong>	
-								</td>
-
-								<td>
-									Active
-								</td>
-							</tr>
+						
 												
 						</table>
 							
