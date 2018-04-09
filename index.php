@@ -12,7 +12,7 @@
 	 $email = $_SESSION['email'];
 	 $sql = "SELECT * from `dashtable` where owner = '$email' ";
 
-	 $select_pictures = fetch_custom($connect, $sql);
+	 $select_pictures = fetch_custom($connect, $sql); 
 
 	 $num_pictures = mysqli_num_rows($select_pictures);
 

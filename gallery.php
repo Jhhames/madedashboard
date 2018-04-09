@@ -58,7 +58,7 @@
 <body>
 	<div class="container-fluid">
 		<div class="row">
-				<div class="col-md-2">
+				<div class="col-md-2 fixed-bottom" >
 					<h4> User Dashboard</h4> <p>
 						<ul  class="nav nav-pills nav-stacked nav-back-collapse" id="side_Menu">
 							<li>   <a href="index.php"><span class="glyphicon glyphicon-th"> </span> Dashboard </a> </li>
@@ -202,7 +202,7 @@
 			</div>
 
 	</div>
-	<footer class="page-footer stylish-color-dark font-small" id="footer" style="background: #010101; color: white; height: 100px;">
+	<footer class="page-footer stylish-color-dark font-small fixed-bottom" id="footer" style="background: #010101; color: white; height: 100px;">
 		<div class="container-fluid">
 		<div class="footer-copyright text-center">
 			&copy; FJhhames 2018
