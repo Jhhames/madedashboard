@@ -113,7 +113,7 @@
 			</div>
 
 	</div>
-	<footer class="page-footer stylish-color-dark font-small" id="footer" style="background: #010101; color: white; height: 100px;">
+	<footer class="page-footer stylish-color-dark font-small fixed-bottom" id="footer" style="background: #010101; color: white; height: 100px;">
 		<div class="container-fluid">
 		<div class="footer-copyright text-center">
 			&copy; FJhhames 2018
