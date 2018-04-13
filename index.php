@@ -9,12 +9,62 @@
 	 	redirect_to('register.php');	
 	 }
 
+	 if (post('upload_logo') !== NULL)
+	 {
+		 	$name = $_FILES['logo_upload']['name'];
+		 	$tmp_loc =$_FILES['logo_upload']['tmp_name'];
+		 	$type = $_FILES['logo_upload']['type'];
+		 	$size = $_FILES['logo_upload']['size'];
+			
+			if(($type !== 'image/png') && ($type != 'image/jpg') && ($type != 'image/jpeg') )
+			{
+				$_SESSION['errorMessage'] ="You need to select a PNG or JPG or JPEG picture.";
+				$_SESSION['errorMessage'] .= " You selceted a file ".$type;
+			}
+			else
+			{
+				$errorforupload = $_SESSION['errormessage'] = "unable to upload image, Check that the size is right";
+				$upload = move_uploaded_file($tmp_loc, 'logo/'.$name) or die($errorforupload);
+					
+
+					if($upload)
+					{
+						$file_url = 'http://localhost/dashboard1/logo/'.$name;
+						$file_name = $name;
+
+						$email = $_SESSION['email'];
+						$sql = "UPDATE `subscribers` SET logo = '$file_url' where email ='$email' ";
+						$db = fetch_custom($connect, $sql);
+
+							if($db)
+							{
+								$_SESSION['successMessage'] = "Logo Changed";
+							}
+							else
+							{
+								$_SESSION['errorMessage'] = mysqli_error($connect);
+							}
+						
+			
+					}
+			}
+	 }
+
 	 $email = $_SESSION['email'];
 	 $sql = "SELECT * from `dashtable` where owner = '$email' ";
 
 	 $select_pictures = fetch_custom($connect, $sql); 
 
 	 $num_pictures = mysqli_num_rows($select_pictures);
+
+	 $sql1 = "SELECT * from `subscribers` where email = '$email'";
+
+	 $select_sub = fetch_custom($connect, $sql1);
+
+	 $row = mysqli_fetch_array($select_sub);
+
+	 $_SESSION['subscription'] = $row['subscription'];
+	 $image_url = $row['logo'];
 
 ?>
 
@@ -24,7 +74,7 @@
 	<title>
 		Dashboard index 
 	</title>
-	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+	<link rel="stylesheet" type="te xt/css" href="css/bootstrap.min.css">
 	<script type="text/javascript" src="js/jquery.min.js"></script>
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -54,17 +104,21 @@
 					</ul>
 			</div>
 			<div class="col-md-10">
-				<?php
-				echo success();
-				echo error();
-				?>
+				
 				<div class="row text-center" >
 					<h1 id="headtext"><?= $_SESSION['designer_name'] ?>  </h1>
 					
+			<?php
+			//images/download.png
+				echo success();
+				echo error();
+			?>
 				</div>
 				<div class="row" style="padding: 5px">
 					<div class="col-md-5">
-						<center id="hoverimage"> <img src="images/download.png" style="margin: auto; border-radius: 150px;">		</center>			
+						<center id="hoverimage">
+							<img src="<?=$image_url ?>" style="margin: auto; border-radius: 150px; width: 200px; height:200px;" alt="logo">	
+						</center>			
 					</div>
 					<div class="col-md-7" style="margin-top:">
 							<table class="table table-striped table-hover" style="height: 100%">
@@ -108,6 +162,25 @@
 					</div>
 				</div>
 					
+					<div class="row">
+						<center>
+							<form action="" method="POST" enctype="multipart/form-data">
+								<table>
+									<tr>
+										<td>
+											<input type="file" name="logo_upload" required class="form-control"> 
+										</td>
+										<td>
+											<button class="btn btn-info" name="upload_logo"> 
+											Change logo
+											</button> 
+										</td>
+									</tr>
+								</table>
+							</form>
+						</center>
+					</div>
+				
 
 			</div>
 			</div>

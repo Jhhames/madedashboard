@@ -78,6 +78,7 @@ Admin Dashboard
 						<li><a href="index.php"><span class="glyphicon glyphicon-th"> </span> Dashboard </a> </li>
 						<li class="active"><a href="subscribers.php"><span class="glyphicon glyphicon-user"> </span> Subscribers </a> </li>
 						<li><a href="admin.php"><span class="glyphicon glyphicon-user"> </span> Admins </a> </li>
+						<li><a href="edit.php"><span class="glyphicon glyphicon-book"> </span> Edit text </a> </li>
 						<li><a href="logout.php"><span class="glyphicon glyphicon-log-out"> </span> Logout </a> </li>
 					</ul>
 			</div>

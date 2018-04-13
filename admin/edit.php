@@ -16,13 +16,49 @@
 
 	 	$select_admin = fetch_custom($connect, $sql);
 	 }
+
+
+	 if(post('save') !== NULL )
+	 {
+	 
+	
+	 	$head = post('head');
+	 	$about = post('about');
+	 	$event = post('event');
+	 	$talk = post('talk');
+
+	 	$sql = "UPDATE `edits` SET head = '$head', about = '$about', event = '$event', talk = '$talk' WHERE id = 1 ";
+	 	$save = fetch_custom($connect, $sql);
+
+	 		if($save)
+	 		{
+	 			$_SESSION['successMessage'] = "Edit Successful";
+	 		}
+	 		else
+	 		{
+	 			// echo mysqli_error($connect);
+	 		}
+
+	 }
+
+
+	 $sql = "SELECT * FROM `edits` WHERE id = 1";
+	 $select = fetch_custom($connect, $sql);
+
+	 $row = mysqli_fetch_array($select);
+
+	 $dbhead = $row['head'];
+	 $dbabout = $row['about'];
+	 $dbevent = $row['event'];
+	 $dbtalk = $row['talk'];
+
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
 	<title>
-Admin Dashboard
+Edit homepage data
 	</title>
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 	<script type="text/javascript" src="js/jquery.min.js"></script>
@@ -41,30 +77,55 @@ Admin Dashboard
 			<div class="col-md-2">
 				<h4> User Dashboard</h4> <p>
 					<ul  class="nav nav-pills nav-stacked" id="side_Menu">
-						<li class="active">   <a href="index.php"><span class="glyphicon glyphicon-th"> </span> Dashboard </a> </li>
+						<li>   <a href="index.php"><span class="glyphicon glyphicon-th"> </span> Dashboard </a> </li>
 						<li><a href="subscribers.php"><span class="glyphicon glyphicon-user"> </span> Subscribers </a> </li>
 						<li><a href="admin.php"><span class="glyphicon glyphicon-user"> </span> Admins </a> </li>
-						<li><a href="edit.php"><span class="glyphicon glyphicon-book"> </span> Edit text </a> </li>
+						<li class="active"><a href="edit.php"><span class="glyphicon glyphicon-book"> </span> Edit text </a> </li>
 						<li><a href="Logout.php"><span class="glyphicon glyphicon-log-out"> </span> Logout </a> </li>
 					</ul>
 			</div>
-			<div class="col-md-10" style="padding-top: 1px;">
+			<div class="col-md-10" style="padding-top:;">
 				<div class="row">
 						<h1 id="headtext">Admin <?= $_SESSION['admin_name'] ?></h1>
 
-				</div>
-				<?= error(); ?> <?= success(); ?>
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						Welcome back 
-					</div>
-					<div class="panel-body">
-				This is the your admin panel you can check the <a href="subscribers.php"><b>subscribers</b> </a> page to activate subscription and deactivate them.<br>
-				You can also add other admins, check the <a href="admin.php"><b>Admins</b> </a> page to get started.
+						<?= error(); ?> <?= success(); ?>
 				</div>
 				
+				<div class="panel panel-default">
+					<div class="panel-heading">
+					<strong>Edit Homepage data </strong>	
+					</div>
+					<div class="panel-body">
+						<form action="" method="POST">
+							<div class="form-group">
+								<label for="head"><h3> Head text </h3> </label>
+								<textarea name="head" id="head" class="form-control" required> <?= $dbhead ?> </textarea>
+							</div>
 
-			</div>
+							<div class="form-group">
+								<label for="about"><h3> About us</h3> </label>
+								<textarea name="about" id="about" class="form-control" required> <?= $dbabout ?> </textarea>
+							</div>
+
+							<div class="form-group">
+								<label for="event"><h3> About Event</h3> </label>
+								<textarea name="event" id="event" class="form-control" required> <?= $dbevent ?></textarea>
+							</div>
+
+							<div class="form-group">
+								<label for="talk"><h3> What Designer's are saying </h3> </label>
+								<textarea name="talk" id="talk" class="form-control" required> <?= $dbtalk ?> </textarea>
+							</div>
+
+							<button  type="submit" class="btn btn-secondary btn-block" name="save">
+								<span class="glyphicon  glyphicon-save"> </span> Save
+							</button>
+						</form>
+
+					</div>
+				
+
+				</div>
 			</div>
 
 		</div>

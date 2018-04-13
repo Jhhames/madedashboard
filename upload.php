@@ -42,7 +42,7 @@
 						<li><a href="gallery.php"><span class="glyphicon glyphicon-picture"> </span> Gallery </a> </li>
 						<li class="active"><a href="upload.php"><span class="glyphicon glyphicon-upload"> </span> Upload </a> </li>
 						<li><a href="subscription.php"><span class="glyphicon glyphicon-user"> </span> Subscription </a> </li>
-						<li><a href="logou.php"> <span class="glyphicon glyphicon-log-out"> </span> Logout </a> </li>
+						<li><a href="logout.php"> <span class="glyphicon glyphicon-log-out"> </span> Logout </a> </li>
 					</ul>
 			</div>
 			<div class="col-md-10">

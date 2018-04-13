@@ -34,16 +34,15 @@
 						if($upload)
 						{
 							$file_url = 'http://localhost/dashboard1/logo/'.$name;
-							$description = post('desc');
 							$file_name = $name;
-
 							$url = $file_url;
-							$_SESSION['errorMessage'] = "";
+							die($url);
 						}
 						else
 						{
-							$_SESSION['errorMessage'] = "unable to upload logo, Check that the size is right, you can upload later in the update profile page";
-							$url = "";
+							$_SESSION['errorMessage'] = "Unable to upload logo, Check that the size is right, you can upload later in the update profile page";
+							// $url = "";
+							die('Unable to upload');
 						}
 				}
 			}
@@ -59,15 +58,22 @@
 
 			 	$to_db = insert($array,$connect, 'subscribers' );
 
-			 	if ($to_db)
+			 	if($to_db)
 			 	{	
-			 		$_SESSION['username'] = $email;
-			 		$_SESSION['successMessage'] = "Registration successful , please check the subscription page for more info";
+			 		$_SESSION['id'] = $row['id'];
+					$_SESSION['designer_name'] = $designer;
+					$_SESSION['owner_name'] = $owner;
+					$_SESSION['email'] = $email;
+					$_SESSION['subscription'] = 'inactive';
+					$_SESSION['logo'] = $url ;
+					$_SESSION['logedin_suscriber'] = TRUE;
+			 		$_SESSION['successMessage'] = "Registration Successful";
 			 		redirect_to('index.php');
+			 		die();
 			 	}
 			 	else
 			 	{
-	
+				
 			 	}
 	 } 
 
@@ -93,6 +99,7 @@
 				$_SESSION['logedin_suscriber'] = TRUE;
 
 				redirect_to('index.php');
+				die();
 			}
 		}
 		else
@@ -221,7 +228,7 @@
 
 		function isLong(password)
 		{
-			return password.length > 6;
+			return password.length >= 6;
 		}
 
 	</script>
@@ -236,7 +243,7 @@
 		<div class="tab-content" style="background-color: white ;" >
 			<div class="tab-pane fade" id="signup" >
 				<div class="row" style="padding:10px">
-					<form method="POST" style="padding: 10px ;" id="signup_form" autocomplete="off">
+					<form method="POST" style="padding: 10px ;" id="signup_form" autocomplete="off" enctype="multipart/form-data">
 						<div class="form-group">
 							<label for="dname"> Desiger name<br> <span style="color: red;" id="name-feedback"></span> </label>
 							<input class="form-control" type="text" name="dname" id="dname" placeholder="Enter Deisgner company name" >
