@@ -34,10 +34,10 @@
 						<li><a href="logout.php"><span class="glyphicon glyphicon-log-out"> </span> Logout </a> </li>
 					</ul>
 			</div>
-			<div class="col-md-10" style="padding-top: 1px;">
+			<div class="col-md-10" style="padding-top: px;">
 				<div class="row">
 						<h1 id="headtext">Subsription </h1>
-
+				</div>
 						<div class="panel panel-default">
 							<div class="panel-heading">
 								<b> Subscription details </b> &nbsp; Your subscription is currently <?= $_SESSION['subscription'] ?>
@@ -47,8 +47,20 @@
 							, amount to transfer and all.
 
 							</div>
+							<div class="panel-footer">
+								<form action="/process" method="POST" >
+								  <script
+								    src="https://js.paystack.co/v1/inline.js" 
+								    data-key="pk_test_6111466383fd76616698800665c28cfc335d50eb"
+								    data-email="customer@email.com"
+								    data-amount="10000"
+								    
+								  >
+								  </script>
+								</form>
+							</div>
 						</div>
-				</div>
+				
 			</div>
 			</div>
 

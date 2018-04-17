@@ -113,7 +113,7 @@
 				echo success();
 				echo error();
 			?>
-				</div>
+				</div> 
 				<div class="row" style="padding: 5px">
 					<div class="col-md-5">
 						<center id="hoverimage">

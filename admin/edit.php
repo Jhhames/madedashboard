@@ -18,7 +18,7 @@
 	 }
 
 
-	 if(post('save') !== NULL )
+	 if(post('save') !== NULL)
 	 {
 	 
 	
@@ -41,6 +41,51 @@
 
 	 }
 
+ 	 if (post('add_sponsor') !== NULL)
+	 {
+		 	$name = $_FILES['sponsor']['name'];
+		 	$tmp_loc =$_FILES['sponsor']['tmp_name'];
+		 	$type = $_FILES['sponsor']['type'];
+		 	$size = $_FILES['sponsor']['size'];
+			
+			if(($type !== 'image/png') && ($type != 'image/jpg') && ($type != 'image/jpeg') )
+			{
+				$_SESSION['errorMessage'] ="You need to select a PNG or JPG or JPEG picture.";
+				$_SESSION['errorMessage'] .= " You selceted a file ".$type;
+			}
+			else
+			{
+				$errorforupload = $_SESSION['errormessage'] = "Unable to upload image, Check that the size is right";
+				$upload = move_uploaded_file($tmp_loc, 'sponsors/'.$name) or die($errorforupload);
+					
+
+					if($upload)
+					{
+						$file_url = 'http://localhost/dashboard1/admin/sponsors/'.$name;
+						$file_name = $name;
+
+
+						$array = array(
+							'url' => $file_url
+						);
+
+						$db = insert($array, $connect, 'sponsors');
+
+							if($db)
+							{
+								$_SESSION['successMessage'] = "Logo Added";
+							}
+							else
+							{
+								$_SESSION['errorMessage'] = mysqli_error($connect);
+							}
+						
+			
+					}
+			}
+	 }
+
+
 
 	 $sql = "SELECT * FROM `edits` WHERE id = 1";
 	 $select = fetch_custom($connect, $sql);
@@ -51,6 +96,9 @@
 	 $dbabout = $row['about'];
 	 $dbevent = $row['event'];
 	 $dbtalk = $row['talk'];
+
+	 $sql = "SELECT * FROM `sponsors`";
+	 $sponsors_select = fetch_custom($connect, $sql);
 
 ?>
 
@@ -126,6 +174,78 @@ Edit homepage data
 				
 
 				</div>
+
+				<div class=" panel panel-info">
+					<div class="panel-heading">
+					Sponsor's Logo
+					</div>
+
+					<div class="panel-body">
+						
+						<?php
+							if(isset($sponsors_select) && mysqli_num_rows($sponsors_select)> 0)
+							{
+								while ($row = mysqli_fetch_array($sponsors_select))
+								{
+									
+						?>
+						<div class="col-sm-1">
+							<div class="thumnail" style="border-radius: 30px;">
+								<div id="hoverimage">
+									<img width="60px" height="60px" src="<?= $row['url'] ?>" style="border-radius: 30px;" alt="Sponsors logo">
+								</div>
+								
+							</div>
+							<p class="caption">
+								<button class="btn btn-danger" style="padding: 2px; margin: auto; ">
+									<span class="glyphicon glyphicon-bin"></span> Delete
+								</button>
+							</p>
+						</div>
+
+						<?php
+
+								}
+							}
+							else
+							{
+						?>
+						<button class="disabled btn btn-default">
+							No Logos uploaded yet
+						</button>	
+						<?php
+							}
+						?>
+
+					</div>
+
+					<div class="panel-footer">
+
+						<center>
+							<form action="" method="POST" enctype="multipart/form-data">
+								<table>
+									<tr>
+										<td>
+											<input type="file" name="sponsor" required class="form-control"> 
+										</td>
+										<td>
+											<button class="btn btn-secondary" name="add_sponsor"> 
+											Add Sponsor's Logo
+											</button> 
+										</td>
+									</tr>
+								</table>
+							</form>
+						</center>
+					</div>
+				</div>
+
+				<a href="preview.php" target="blank"><button class="btn btn-info">
+					<span class="glyphicon glyphicon-eye-open"></span> 
+				HomePage preview</button> </a>
+
+
+		
 			</div>
 
 		</div>
