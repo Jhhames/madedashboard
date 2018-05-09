@@ -29,6 +29,7 @@
 
 	 $sql = "SELECT * FROM `subscribers` WHERE subscription = 'active' ";
 	 $sub_select = fetch_custom($connect, $sql);
+		
 
 ?>
 

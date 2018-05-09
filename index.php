@@ -145,6 +145,24 @@
 								<td>
 									<?=	$num_pictures ?>
 								</td>
+							</tr>
+							<tr>
+								<td>
+									<strong> Contact</strong>	
+								</td>
+
+								<td>
+									<?=	$_SESSION['contact'] ?>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<strong> Work Address </strong>	
+								</td>
+
+								<td>
+									<?=	$_SESSION['work'] ?>
+								</td>
 							</tr>	
 							<tr>
 								<td>
@@ -172,10 +190,16 @@
 										</td>
 										<td>
 											<button class="btn btn-info" name="upload_logo"> 
-											Change logo
+											Change Cover
 											</button> 
 										</td>
 									</tr>
+									<tr>
+										<td colspan="2" class="text-primary text-center">
+											Make sure to upload your cover picture, this is what will be displayed on our homepage.
+										</td>
+									</tr>
+
 								</table>
 							</form>
 						</center>

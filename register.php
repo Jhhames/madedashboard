@@ -9,43 +9,8 @@
 		$owner = post('oname');
 		$email = post('email');
 		$password = post('password');
-		$url ="";
-		$_SESSION['errorMessage'] = "unable to upload logo, Check that the size is right, you can upload later in the update profile page";
-	 	
-			if(post('logo') != null)
-			{
-				$name = $_FILES['logo']['name'];
-			 	$tmp_loc =$_FILES['logo']['tmp_name'];
-			 	$type = $_FILES['logo']['type'];
-			 	$size = $_FILES['logo']['size'];
-				if(($type != 'image/png') && ($type != 'image/jpg') && ($type != 'image/jpeg') )
-				{
-					$_SESSION['errorMessage'] ="You need to select a PNG or JPG or JPEG picture.";
-					$_SESSION['errorMessage'] .= " You selected a file ".$type;
-					$_SESSION['errorMessage'] .= " you can upload later in the update profile page";
-					$url = "";
-
-					die($_SESSION['errorMessage']);
-				}
-				else
-				{
-					$errorforupload = $_SESSION['errorMessage'] = "unable to upload logo, Check that the size is right, you can upload later in the update profile page";
-					$upload = move_uploaded_file($tmp_loc, 'logo/'.$name) or die($errorforupload);
-						if($upload)
-						{
-							$file_url = 'http://localhost/dashboard1/logo/'.$name;
-							$file_name = $name;
-							$url = $file_url;
-							die($url);
-						}
-						else
-						{
-							$_SESSION['errorMessage'] = "Unable to upload logo, Check that the size is right, you can upload later in the update profile page";
-							// $url = "";
-							die('Unable to upload');
-						}
-				}
-			}
+		$contact = post('contact');
+		$work = post('work');
 			
 			 	$array = array(
 			 		'designer_name' => $designer,
@@ -53,7 +18,8 @@
 			 		'email' => $email,
 			 		'password' => $password,
 			 		'subscription' => 'inactive',
-			 		'logo' => $url
+			 		'contact' => $contact,
+			 		'work' => $work
 			 	);
 
 			 	$to_db = insert($array,$connect, 'subscribers' );
@@ -65,7 +31,8 @@
 					$_SESSION['owner_name'] = $owner;
 					$_SESSION['email'] = $email;
 					$_SESSION['subscription'] = 'inactive';
-					$_SESSION['logo'] = $url ;
+					$_SESSION['contact'] = $contact ;
+					$_SESSION['work'] = $work ;
 					$_SESSION['logedin_suscriber'] = TRUE;
 			 		$_SESSION['successMessage'] = "Registration Successful";
 			 		redirect_to('index.php');
@@ -96,6 +63,8 @@
 				$_SESSION['email'] = $row['email'];
 				$_SESSION['subscription'] = $row['subscription'];
 				$_SESSION['logo'] = $row['logo'];
+				$_SESSION['contact'] = $row['contact'];
+				$_SESSION['work'] = $row['work'];
 				$_SESSION['logedin_suscriber'] = TRUE;
 
 				redirect_to('index.php');
@@ -260,6 +229,16 @@
 						</div>
 
 						<div class="form-group">
+							<label for="work"> Store Address</label><br>
+							<input class="form-control" type="text" name="work" id="work"  placeholder="Enter the Address of your Place of work" />
+						</div>
+
+						<div class="form-group">
+							<label for="contact">Contact Number</label><br>
+							<input type="text" required class="form-control" placeholder="Enter Your Contact number" name="contact" id="contact">
+						</div>
+			
+						<div class="form-group">
 							<label for="password1"> Password <br> <span style="color: red;" id="pass-feedback"></span> </label><br>
 							<input class="form-control" type="password" name="password" id="password1"  placeholder="Enter Password" />
 						</div>
@@ -267,11 +246,6 @@
 						<div class="form-group">
 							<label for="vpword">Retype Password <br> <span style="color: red;" id="verify-feedback"></span> </label><br>
 							<input class="form-control" type="password" name="vpword" id="vpword"  placeholder="Verify Password" />
-						</div>
-
-						<div class="form-group">
-							<label for="logo"> Upload Designer's Logo (optional)</label>
-							<input type="file" name="logo" id="logo">
 						</div>
 
 						<input type="submit" class="btn btn-primary btn-block" name="signup" value="Sign up" />
