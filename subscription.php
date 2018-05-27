@@ -2,6 +2,9 @@
 	include('JhhamesPhp/database.php');
 	include('JhhamesPhp/sessions.php');
 	 $connect = connect_db('dashboard');
+
+	
+
 ?>
 
 <!DOCTYPE html>

